@@ -26,8 +26,8 @@ void graph_optimizer::optimize(data::keyframe* loop_keyfrm, data::keyframe* curr
                                const std::map<data::keyframe*, std::set<data::keyframe*>>& loop_connections) const {
     // 1. Construct an optimizer
 
-    auto linear_solver = g2o::make_unique<g2o::LinearSolverCSparse<g2o::BlockSolver_7_3::PoseMatrixType>>();
-    auto block_solver = g2o::make_unique<g2o::BlockSolver_7_3>(std::move(linear_solver));
+    auto linear_solver = std::make_unique<g2o::LinearSolverCSparse<g2o::BlockSolver_7_3::PoseMatrixType>>();
+    auto block_solver = std::make_unique<g2o::BlockSolver_7_3>(std::move(linear_solver));
     auto algorithm = new g2o::OptimizationAlgorithmLevenberg(std::move(block_solver));
 
     g2o::SparseOptimizer optimizer;

@@ -79,7 +79,11 @@
         "ranges": "cpp",
         "valarray": "cpp",
         "charconv": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "source_location": "cpp",
+        "hash_map": "cpp",
+        "future": "cpp",
+        "span": "cpp"
     },
     "cmake.useCMakePresets": "never"
 }

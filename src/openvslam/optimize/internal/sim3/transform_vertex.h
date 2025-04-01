@@ -3,8 +3,11 @@
 
 #include "openvslam/type.h"
 
+#include <g2o/core/eigen_types.h>
 #include <g2o/core/base_vertex.h>
 #include <g2o/types/sim3/sim3.h>
+
+using namespace g2o;
 
 namespace openvslam {
 namespace optimize {

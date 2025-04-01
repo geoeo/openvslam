@@ -4,6 +4,7 @@
 #include "openvslam/optimize/internal/sim3/transform_vertex.h"
 #include "openvslam/optimize/internal/sim3/mutual_reproj_edge_wrapper.h"
 
+#include <memory>
 #include <g2o/core/solver.h>
 #include <g2o/core/block_solver.h>
 #include <g2o/core/sparse_optimizer.h>
@@ -24,8 +25,8 @@ unsigned int transform_optimizer::optimize(data::keyframe* keyfrm_1, data::keyfr
 
     // 1. Construct an optimizer
 
-    auto linear_solver = g2o::make_unique<g2o::LinearSolverEigen<g2o::BlockSolverX::PoseMatrixType>>();
-    auto block_solver = g2o::make_unique<g2o::BlockSolverX>(std::move(linear_solver));
+    auto linear_solver = std::make_unique<g2o::LinearSolverEigen<g2o::BlockSolverX::PoseMatrixType>>();
+    auto block_solver = std::make_unique<g2o::BlockSolverX>(std::move(linear_solver));
     auto algorithm = new g2o::OptimizationAlgorithmLevenberg(std::move(block_solver));
 
     g2o::SparseOptimizer optimizer;
