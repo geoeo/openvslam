@@ -198,11 +198,7 @@ float loop_detector::compute_min_score_in_covisibilities(data::keyframe* keyfrm)
         }
         const auto& bow_vec_2 = covisibility->bow_vec_;
 
-#ifdef USE_DBOW2
         const float score = bow_vocab_->score(bow_vec_1, bow_vec_2);
-#else
-        const float score = fbow::BoWVector::score(bow_vec_1, bow_vec_2);
-#endif
         if (score < min_score) {
             min_score = score;
         }

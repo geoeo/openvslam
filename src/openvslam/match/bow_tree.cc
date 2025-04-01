@@ -4,11 +4,7 @@
 #include "openvslam/match/bow_tree.h"
 #include "openvslam/match/angle_checker.h"
 
-#ifdef USE_DBOW2
 #include <DBoW2/FeatureVector.h>
-#else
-#include <fbow/bow_feat_vector.h>
-#endif
 
 namespace openvslam {
 namespace match {
@@ -22,17 +18,11 @@ unsigned int bow_tree::match_frame_and_keyframe(data::keyframe* keyfrm, data::fr
 
     const auto keyfrm_lms = keyfrm->get_landmarks();
 
-#ifdef USE_DBOW2
     DBoW2::FeatureVector::const_iterator keyfrm_itr = keyfrm->bow_feat_vec_.begin();
     DBoW2::FeatureVector::const_iterator frm_itr = frm.bow_feat_vec_.begin();
     const DBoW2::FeatureVector::const_iterator kryfrm_end = keyfrm->bow_feat_vec_.end();
     const DBoW2::FeatureVector::const_iterator frm_end = frm.bow_feat_vec_.end();
-#else
-    fbow::BoWFeatVector::const_iterator keyfrm_itr = keyfrm->bow_feat_vec_.begin();
-    fbow::BoWFeatVector::const_iterator frm_itr = frm.bow_feat_vec_.begin();
-    const fbow::BoWFeatVector::const_iterator kryfrm_end = keyfrm->bow_feat_vec_.end();
-    const fbow::BoWFeatVector::const_iterator frm_end = frm.bow_feat_vec_.end();
-#endif
+
 
     while (keyfrm_itr != kryfrm_end && frm_itr != frm_end) {
         // Check if the node numbers of BoW tree match
@@ -135,17 +125,11 @@ unsigned int bow_tree::match_keyframes(data::keyframe* keyfrm_1, data::keyframe*
     // NOTE: the size matches the number of the keypoints in keyframe 2
     std::vector<bool> is_already_matched_in_keyfrm_2(keyfrm_2_lms.size(), false);
 
-#ifdef USE_DBOW2
     DBoW2::FeatureVector::const_iterator itr_1 = keyfrm_1->bow_feat_vec_.begin();
     DBoW2::FeatureVector::const_iterator itr_2 = keyfrm_2->bow_feat_vec_.begin();
     const DBoW2::FeatureVector::const_iterator itr_1_end = keyfrm_1->bow_feat_vec_.end();
     const DBoW2::FeatureVector::const_iterator itr_2_end = keyfrm_2->bow_feat_vec_.end();
-#else
-    fbow::BoWFeatVector::const_iterator itr_1 = keyfrm_1->bow_feat_vec_.begin();
-    fbow::BoWFeatVector::const_iterator itr_2 = keyfrm_2->bow_feat_vec_.begin();
-    const fbow::BoWFeatVector::const_iterator itr_1_end = keyfrm_1->bow_feat_vec_.end();
-    const fbow::BoWFeatVector::const_iterator itr_2_end = keyfrm_2->bow_feat_vec_.end();
-#endif
+
 
     while (itr_1 != itr_1_end && itr_2 != itr_2_end) {
         // Check if the node numbers of BoW tree match

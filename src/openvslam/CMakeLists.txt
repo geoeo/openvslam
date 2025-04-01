@@ -20,8 +20,7 @@ find_package(g2o REQUIRED
              g2o::solver_csparse
              g2o::csparse_extension
              OPTIONAL_COMPONENTS
-             g2o::csparse 
-             PATHS "/workspaces/ORB_SLAM3_V1.0/openvslam/3rd/g2o/build/generated/")
+             g2o::csparse)
 
 # Check first if CSparse is built from g2o
 if(TARGET g2o::csparse)
@@ -45,18 +44,6 @@ endif()
 
 # Check BoW Framework
 find_package(DBoW2 REQUIRED)
-set(BOW_FRAMEWORK "DBoW2" CACHE STRING "DBoW2 or FBoW")
-set_property(CACHE BOW_FRAMEWORK PROPERTY STRINGS "DBoW2" "FBoW")
-if(BOW_FRAMEWORK MATCHES "DBoW2")
-
-elseif(BOW_FRAMEWORK MATCHES "FBoW")
-    find_package(fbow QUIET)
-    if(NOT fbow_FOUND)
-        add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/FBoW ${PROJECT_BINARY_DIR}/3rd/FBoW)
-    endif()
-else()
-    message(FATAL_ERROR "Invalid BoW framework: ${BOW_FRAMEWORK}")
-endif()
 
 # ----- Create OpenVSLAM library -----
 
@@ -109,25 +96,6 @@ else()
     message(STATUS "SSE for floating-point operation: DISABLED")
 endif()
 
-if(BOW_FRAMEWORK MATCHES "DBoW2")
-    set(BoW_LIBRARY ${DBoW2_LIBS})
-    target_compile_definitions(${PROJECT_NAME} PUBLIC USE_DBOW2)
-    message(STATUS "BoW framework: ${BOW_FRAMEWORK} (found in ${DBoW2_INCLUDE_DIRS})")
-elseif(BOW_FRAMEWORK MATCHES "FBoW")
-    if(fbow_FOUND)
-        set(BoW_LIBRARY ${fbow_LIBS})
-        message(STATUS "BoW framework: ${BOW_FRAMEWORK} (found in ${fbow_INCLUDE_DIRS})")
-    else()
-        target_include_directories(${PROJECT_NAME}
-                                PUBLIC
-                                $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/3rd/FBoW/include>
-                                $<INSTALL_INTERFACE:include/fbow>)
-        set(BoW_LIBRARY fbow)
-        message(STATUS "BoW framework: ${BOW_FRAMEWORK} (Using submodule)")
-    endif()
-else()
-    message(FATAL_ERROR "Invalid BoW framework: ${BOW_FRAMEWORK}")
-endif()
 
 # ----- Configure OpenVSLAM library -----
 
@@ -138,12 +106,12 @@ target_include_directories(${PROJECT_NAME}
                            PUBLIC
                            $<BUILD_INTERFACE:${json_INCLUDE_DIR}>
                            $<BUILD_INTERFACE:${spdlog_INCLUDE_DIR}>
-                           $<BUILD_INTERFACE:${BoW_INCLUDE_DIR}>
-                           $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/>
+                           $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:${OPENVSLAM_INCLUDE_INSTALL_DIR}/3rd/json/include>
                            $<INSTALL_INTERFACE:${OPENVSLAM_INCLUDE_INSTALL_DIR}/3rd/spdlog/include>
-                           $<INSTALL_INTERFACE:${BoW_INCLUDE_DIR}>
-                           $<INSTALL_INTERFACE:include/>)
+                           $<INSTALL_INTERFACE:${OPENVSLAM_INCLUDE_INSTALL_DIR}>
+                           ${G2O_INCLUDE_DIR}
+                           ${DBoW2_INCLUDE_DIRS})
 
 # Link to required libraries
 target_link_libraries(${PROJECT_NAME}
@@ -165,13 +133,11 @@ target_link_libraries(${PROJECT_NAME}
                       g2o::csparse_extension
                       ${CXSPARSE_LIBRARIES}
                       ${SUITESPARSE_LIBRARIES}
-                      ${BoW_LIBRARY}
+                      ${DBoW2_LIBRARIES}
                       PRIVATE
                       ${LAPACK_LIBRARIES})
 
 # ----- Install configuration -----
-
-set(OPENVSLAM_INCLUDE_INSTALL_DIR ${INCLUDES_DESTINATION}/openvslam)
 
 # Install OpenVSLAM library
 install(TARGETS ${PROJECT_NAME}

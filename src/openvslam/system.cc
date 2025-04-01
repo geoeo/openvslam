@@ -48,7 +48,6 @@ system::system(const std::shared_ptr<config>& cfg, const std::string& vocab_file
 
     // load ORB vocabulary
     spdlog::info("loading ORB vocabulary: {}", vocab_file_path);
-#ifdef USE_DBOW2
     bow_vocab_ = new data::bow_vocabulary();
     try {
         bow_vocab_->loadFromBinaryFile(vocab_file_path);
@@ -59,16 +58,7 @@ system::system(const std::shared_ptr<config>& cfg, const std::string& vocab_file
         bow_vocab_ = nullptr;
         exit(EXIT_FAILURE);
     }
-#else
-    bow_vocab_ = new fbow::Vocabulary();
-    bow_vocab_->readFromFile(vocab_file_path);
-    if (!bow_vocab_->isValid()) {
-        spdlog::critical("wrong path to vocabulary");
-        delete bow_vocab_;
-        bow_vocab_ = nullptr;
-        exit(EXIT_FAILURE);
-    }
-#endif
+
 
     // database
     cam_db_ = new data::camera_database(camera_);

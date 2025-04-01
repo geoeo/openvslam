@@ -12,13 +12,9 @@
 #include <opencv2/core.hpp>
 #include <Eigen/Core>
 
-#ifdef USE_DBOW2
 #include <DBoW2/BowVector.h>
 #include <DBoW2/FeatureVector.h>
-#else
-#include <fbow/bow_vector.h>
-#include <fbow/bow_feat_vector.h>
-#endif
+
 
 namespace openvslam {
 
@@ -209,13 +205,8 @@ public:
     std::vector<float> depths_;
 
     //! BoW features (DBoW2 or FBoW)
-#ifdef USE_DBOW2
     DBoW2::BowVector bow_vec_;
     DBoW2::FeatureVector bow_feat_vec_;
-#else
-    fbow::BoWVector bow_vec_;
-    fbow::BoWFeatVector bow_feat_vec_;
-#endif
 
     // ORB descriptors
     //! ORB descriptors of monocular or stereo left image

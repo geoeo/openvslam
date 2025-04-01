@@ -173,11 +173,7 @@ void frame::update_orb_info() {
 
 void frame::compute_bow() {
     if (bow_vec_.empty()) {
-#ifdef USE_DBOW2
         bow_vocab_->transform(util::converter::to_desc_vec(descriptors_), bow_vec_, bow_feat_vec_, 4);
-#else
-        bow_vocab_->transform(descriptors_, 4, bow_vec_, bow_feat_vec_);
-#endif
     }
 }
 

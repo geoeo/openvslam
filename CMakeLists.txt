@@ -87,7 +87,7 @@ if(NOT TARGET OpenMP::OpenMP_CXX)
 endif()
 
 # Eigen
-find_package(Eigen3 3.4.0 REQUIRED EXACT NO_MODULE)
+find_package(Eigen3 3.4.0 REQUIRED EXACT)
 
 # yaml-cpp
 find_package(yaml-cpp REQUIRED)

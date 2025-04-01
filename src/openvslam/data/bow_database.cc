@@ -236,11 +236,7 @@ bool bow_database::compute_scores(const T* const qry_shot, const unsigned int mi
         if (min_num_common_words_thr < num_common_words_.at(candidate)) {
             // Calculate similarity score with query keyframe
             // for the keyframes which have more shared words than minimum common words
-#ifdef USE_DBOW2
             const float score = bow_vocab_->score(qry_shot->bow_vec_, candidate->bow_vec_);
-#else
-            const float score = fbow::BoWVector::score(qry_shot->bow_vec_, candidate->bow_vec_);
-#endif
             // Store score
             scores_[candidate] = score;
         }
