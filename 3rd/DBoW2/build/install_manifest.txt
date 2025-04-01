@@ -1,0 +1,12 @@
+/usr/local/lib/libDBoW2.so
+/usr/local/include/DBoW2/BowVector.h
+/usr/local/include/DBoW2/FORB.h
+/usr/local/include/DBoW2/FClass.h
+/usr/local/include/DBoW2/FeatureVector.h
+/usr/local/include/DBoW2/ScoringObject.h
+/usr/local/include/DBoW2/TemplatedVocabulary.h
+/usr/local/include/DBoW2/DUtils/Random.h
+/usr/local/include/DBoW2/DUtils/Timestamp.h
+/usr/local/lib/cmake/DBoW2/DBoW2Targets.cmake
+/usr/local/lib/cmake/DBoW2/DBoW2Targets-release.cmake
+/usr/local/lib/cmake/DBoW2/DBoW2Config.cmake

@@ -1,0 +1,56 @@
+#!/bin/bash
+set -ex
+
+# DBoW2
+cd ~ && mkdir DBoW2 && cd DBoW2
+git clone https://github.com/shinsumicco/DBoW2.git
+cd DBoW2
+git checkout e8cc74d24705d0ad61b68df4e1086d1deff67136
+mkdir build && cd build
+cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr/local \
+    ..
+make -j $(nproc --all)
+make install
+
+# G2O
+cd ~ && mkdir g2o && cd g2o
+git clone https://github.com/RainerKuemmerle/g2o.git
+cd g2o
+git checkout 9b41a4ea5ade8e1250b9c1b279f3a9c098811b5a
+mkdir build && cd build
+cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr/local \
+    -DCMAKE_CXX_FLAGS=-std=c++11 \
+    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_UNITTESTS=OFF \
+    -DBUILD_WITH_MARCH_NATIVE=OFF \
+    -DG2O_USE_CHOLMOD=OFF \
+    -DG2O_USE_CSPARSE=ON \
+    -DG2O_USE_OPENGL=OFF \
+    -DG2O_USE_OPENMP=ON \
+    ..
+make -j $(nproc --all)
+make install
+
+# OpenVSLAM
+cd ~ && mkdir openvslam && cd openvslam
+git clone https://github.com/laxnpander/openvslam.git
+cd openvslam 
+git checkout 29b5f2dc741508e8527a14a2ac7a09ed687ecdde
+mkdir build && cd build
+cmake \
+    -DBUILD_WITH_MARCH_NATIVE=OFF \
+    -DUSE_PANGOLIN_VIEWER=OFF \
+    -DUSE_SOCKET_PUBLISHER=OFF \
+    -DUSE_STACK_TRACE_LOGGER=ON \
+    -DBOW_FRAMEWORK=DBoW2 \
+    -DBUILD_TESTS=ON \
+    ..
+make -j $(nproc --all)
+make install
+
+# Update the Apt Cache
+sudo apt update
